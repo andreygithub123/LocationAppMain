@@ -49,6 +49,16 @@
         // if commented this line the marker and circle will show my location but the map will not redirect me to my location
         map.fitBounds(featureGroup.getBounds())
 
+
+        //shows coordinates in log 
         console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
+
+        var locationLayer = L.geoJSON(locationList,{
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng)
+            }
+        });
+
+        locationLayer.addTo(map);
     }
 
