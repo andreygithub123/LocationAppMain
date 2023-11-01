@@ -19,7 +19,7 @@ h1 {
     border-radius: 1px;
     cursor: pointer;
     font-size: 20px;
-    
+
 }
 
 .square-box {
@@ -29,3 +29,13 @@ h1 {
     background-color: #F3E9DD;
 }
 
+#map {
+    height: 100vh;
+}
+
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
