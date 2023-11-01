@@ -53,12 +53,207 @@
         //shows coordinates in log 
         console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
 
-        var locationLayer = L.geoJSON(locationList,{
+        
+       ///////////making custom icons
+
+        //hospital icon
+        var hospitalIcon = L.icon({
+            iconUrl: '../resources/icons/hospital.png',
+            iconSize:[35,35]
+        })
+
+        //restaurant icon
+        var restaurantIcon = L.icon({
+            iconUrl: '../resources/icons/restaurant.png',
+            iconSize:[35,35]
+        })
+
+        //gas icon
+        var gasIcon = L.icon({
+            iconUrl: '../resources/icons/gas.png',
+            iconSize:[35,35]
+        })
+
+        //hotel icon
+        var hotelIcon = L.icon({
+            iconUrl: '../resources/icons/hotel.png',
+            iconSize:[35,35]
+        })
+
+        
+        //////////// marking json location on map
+
+        //putting hospitals on map
+        var hospitalLocations = L.geoJSON(hospitalList,{
+            onEachFeature:showPopup,
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng)
+                return L.marker(latlng,{icon:hospitalIcon});
             }
         });
 
-        locationLayer.addTo(map);
+        hospitalLocations.addTo(map);
+
+        //puting restaurant on map 
+        var restaurantLocations = L.geoJSON(restaurantList,{
+            onEachFeature:showPopup,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon:restaurantIcon});
+            }
+        });
+
+        restaurantLocations.addTo(map);
+
+        // putting gas stations on map
+        var gasLocations = L.geoJSON(gasList,{
+            onEachFeature:showPopup,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon:gasIcon});
+            }
+        });
+
+        gasLocations.addTo(map);
+
+        //putting hotel on map
+        var hotelLocations = L.geoJSON(hotelList,{
+            onEachFeature:showPopup,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon:hotelIcon});
+            }
+        });
+
+        hotelLocations.addTo(map);
+
+
+
+        ////////////////////////////// making pop-up functions
+        function showPopup(feature,layer){
+            layer.bindPopup(makePopupContent(feature),{closeButton:false,offset: L.point(0,-8)})
+        }
+
+        function makePopupContent(office){
+            return `
+            <div> 
+                <h4>${office.properties.name}</h4>
+                <p>${office.properties.address}</p>
+                <div class="phone-number">
+                    <a href="tel:${office.properties.phone}">${office.properties.phone}</a>
+                </div>
+            </div>
+            `
+        }
+
+
+      
+
+        //left container fill 
+        function populateLocations(){
+            const ul =document.querySelector('.list');
+            restaurantList.forEach((office) => {
+                const li=document.createElement('li');
+                const div=document.createElement('div');
+                const a =document.createElement('a');
+                const p = document.createElement('p');
+
+                //calling flyToStore function in order to work properly
+                a.addEventListener('click', () => {
+                    flyToStore(office);
+                });
+                
+                div.classList.add('office-item');
+                a.innerText = office.properties.name;
+                a.href='#';
+                p.innerText = office.properties.address;
+
+                div.appendChild(a);
+                div.appendChild(p);
+                li.appendChild(div);
+                ul.appendChild(li);
+            })
+
+            hotelList.forEach((office) => {
+                const li=document.createElement('li');
+                const div=document.createElement('div');
+                const a =document.createElement('a');
+                const p = document.createElement('p');
+
+                //calling flyToStore function in order to work properly
+                a.addEventListener('click', () => {
+                    flyToStore(office);
+                });
+
+                div.classList.add('office-item');
+                a.innerText = office.properties.name;
+                a.href='#';
+                p.innerText = office.properties.address;
+
+                div.appendChild(a);
+                div.appendChild(p);
+                li.appendChild(div); 
+            })
+
+            gasList.forEach((office) => {
+                const li=document.createElement('li');
+                const div=document.createElement('div');
+                const a =document.createElement('a');
+                const p = document.createElement('p');
+
+                //calling flyToStore function in order to work properly
+                a.addEventListener('click', () => {
+                    flyToStore(office);
+                });
+
+                div.classList.add('office-item');
+                a.innerText = office.properties.name;
+                a.href='#';
+                p.innerText = office.properties.address;
+
+                div.appendChild(a);
+                div.appendChild(p);
+                li.appendChild(div);
+                ul.appendChild(li);
+            })
+
+            hospitalList.forEach((office) => {
+                const li=document.createElement('li');
+                const div=document.createElement('div');
+                const a =document.createElement('a');
+                const p = document.createElement('p');
+
+                //calling flyToStore function in order to work properly
+                a.addEventListener('click', () => {
+                    flyToStore(office);
+                });
+
+                div.classList.add('office-item');
+                a.innerText = office.properties.name;
+                a.href='#';
+                p.innerText = office.properties.address;
+
+                div.appendChild(a);
+                div.appendChild(p);
+                li.appendChild(div);
+                ul.appendChild(li);
+            })
+
+            
+            
+        }
+
+        populateLocations();
+
+        //when clicking  fly to location
+        function flyToStore(office){
+            const lat = office.geometry.coordinates[1];
+            const lng = office.geometry.coordinates[0];
+            map.flyTo([lat,lng],14, {
+                duration : 3
+            });
+            setTimeout( () => {
+                L.popup({closeButton:false,offset: L.point(0,-8)})
+                .setLatLng([lat,lng])
+                .setContent(makePopupContent(office))
+                .openOn(map)
+            },3000);
+        }
     }
 
