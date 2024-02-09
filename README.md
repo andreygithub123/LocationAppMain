@@ -24,7 +24,7 @@ LocationMainApp is a lightweight, full-stack web application inspired by Google 
 ### Installation
 1. Clone the repository to your local machine:
    ```shell
-   git clone https://github.com/yourusername/LocationMainApp.git
+   git clone https://github.com/andreygithub123/LocationAppMain
 
 ### Acknowledgments
 Leaflet.js for the incredible mapping capabilities.
